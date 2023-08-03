@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Gridworld Task</title>
+    <script src="jspsych-6.1.0/jspsych.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-instructions.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-animation.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-external-html.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-survey-text.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-survey-multi-choice.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-call-function.js"></script>
+    <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+  </head>
+  <body></body>
+  <script>
+
+    /* create timeline */
+    var timeline = [];
+
+    /* define welcome message trial */
+    var welcome = {
+      type: "html-keyboard-response",
+      stimulus: "Welcome to the experiment. Press any key to begin."
+    };
+    timeline.push(welcome);
+
+    /* define instructions trial */
+    var instructions = {
+      type: "html-keyboard-response",
+      stimulus: "<p>In this experiment, a grid will appear in the center " +
+          "of the screen, and you can choose to travel to Goal A (A) or Goal B(B) " + 
+          "from the starting location (the blue dot).</p>" + 
+          "<p>If you would rather go to <strong>Goal A</strong>, " +
+          "press the letter A on the keyboard as fast as you can.</p>" +
+          "<p>If you would rather go to <strong>Goal B</strong>, " +
+          "press the letter B on the keyboard as fast as you can.</p>" +
+          "<p>Press any key to begin!</p>",
+      show_clickable_nav: true,
+      post_trial_gap: 2000
+    };
+    timeline.push(instructions);
+
+    function saveData(name, data) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'write_data.php'); // 'write_data.php' is the path to the php file described above.
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify({
+        filename: name,
+        filedata: data
+      }));
+    }
+
+    var block_init = {
+      type: 'html-keyboard-response',
+      stimulus: "<p>Welcome to a new block.</p>" +
+        "<p>Press any key to begin.</p>",
+      post_trial_gap: 100
+    }
+
+    var end_block = {
+      type: 'html-keyboard-response',
+      choices: ['spacebar'],
+      data: {
+        stimulus_type: 'end_block'
+      },
+      stimulus: "<p>You have finished a block. You can take a break or tap the spacebar to continue to the next block. </p>"
+    }
+
+    var end = {
+      type: 'html-keyboard-response',
+      choices: ['spacebar'],
+      stimulus: "<p>You have finished all blocks! Press the spacebar to save your data. </p>"
+    }
+
+    var test_stimuli_bl1 = [
+      { stimulus: "images/a1.jpeg", data: { grid: 'a1'} },
+      { stimulus: "images/a2.jpeg", data: { grid: 'a2'} },
+      { stimulus: "images/a3.jpeg", data: { grid: 'a3'} },
+      { stimulus: "images/a4.jpeg", data: { grid: 'a4'} },
+      { stimulus: "images/a5.jpeg", data: { grid: 'a5'} },
+      { stimulus: "images/a6.jpeg", data: { grid: 'a6'} },
+      { stimulus: "images/a7.jpeg", data: { grid: 'a7'} },
+      { stimulus: "images/a8.jpeg", data: { grid: 'a8'} },
+      { stimulus: "images/a9.jpeg", data: { grid: 'a9'} },
+      { stimulus: "images/a10.jpeg", data: { grid: 'a10'} },
+      { stimulus: "images/a11.jpeg", data: { grid: 'a11'} },
+      { stimulus: "images/a12.jpeg", data: { grid: 'a12'} },
+      { stimulus: "images/a13.jpeg", data: { grid: 'a13'} },
+      { stimulus: "images/a14.jpeg", data: { grid: 'a14'} },
+      { stimulus: "images/a15.jpeg", data: { grid: 'a15'} },
+      { stimulus: "images/a16.jpeg", data: { grid: 'a16'} },
+    ];
+
+    var test_stimuli_bl2 = [
+      { stimulus: "images/b1.jpeg", data: { grid: 'b1'} },
+      { stimulus: "images/b2.jpeg", data: { grid: 'b2'} },
+      { stimulus: "images/b3.jpeg", data: { grid: 'b3'} },
+      { stimulus: "images/b4.jpeg", data: { grid: 'b4'} },
+      { stimulus: "images/b5.jpeg", data: { grid: 'b5'} },
+      { stimulus: "images/b6.jpeg", data: { grid: 'b6'} },
+      { stimulus: "images/b7.jpeg", data: { grid: 'b7'} },
+      { stimulus: "images/b8.jpeg", data: { grid: 'b8'} },
+      { stimulus: "images/b9.jpeg", data: { grid: 'b9'} },
+      { stimulus: "images/b10.jpeg", data: { grid: 'b10'} },
+      { stimulus: "images/b11.jpeg", data: { grid: 'b11'} },
+      { stimulus: "images/b12.jpeg", data: { grid: 'b12'} },
+      { stimulus: "images/b13.jpeg", data: { grid: 'b13'} },
+      { stimulus: "images/b14.jpeg", data: { grid: 'b14'} },
+      { stimulus: "images/b15.jpeg", data: { grid: 'b15'} },
+      { stimulus: "images/b16.jpeg", data: { grid: 'b16'} },
+    ];
+
+    var test_stimuli_bl3 = [
+      { stimulus: "images/c1.jpeg", data: { grid: 'c1'} },
+      { stimulus: "images/c2.jpeg", data: { grid: 'c2'} },
+      { stimulus: "images/c3.jpeg", data: { grid: 'c3'} },
+      { stimulus: "images/c4.jpeg", data: { grid: 'c4'} },
+      { stimulus: "images/c5.jpeg", data: { grid: 'c5'} },
+      { stimulus: "images/c6.jpeg", data: { grid: 'c6'} },
+      { stimulus: "images/c7.jpeg", data: { grid: 'c7'} },
+      { stimulus: "images/c8.jpeg", data: { grid: 'c8'} },
+      { stimulus: "images/c9.jpeg", data: { grid: 'c9'} },
+      { stimulus: "images/c10.jpeg", data: { grid: 'c10'} },
+      { stimulus: "images/c11.jpeg", data: { grid: 'c11'} },
+      { stimulus: "images/c12.jpeg", data: { grid: 'c12'} },
+      { stimulus: "images/c13.jpeg", data: { grid: 'c13'} },
+      { stimulus: "images/c14.jpeg", data: { grid: 'c14'} },
+      { stimulus: "images/c15.jpeg", data: { grid: 'c15'} },
+      { stimulus: "images/c16.jpeg", data: { grid: 'c16'} },
+    ];
+
+    var fixation = {
+      type: 'html-keyboard-response',
+      stimulus: '<div style="font-size:60px;">Wait for the grid to show up!</div>',
+      choices: jsPsych.NO_KEYS,
+      trial_duration: 500,
+      data: {test_part: 'fixation'}
+    }
+
+    var test = {
+      type: "image-keyboard-response",
+      stimulus: jsPsych.timelineVariable('stimulus'),
+      choices: ['a', 'b'],
+      data: jsPsych.timelineVariable('data'),
+      on_finish: function(data){
+        data.response = jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(data.key_press);
+      },
+    }
+
+    var test_procedure_bl1 = {
+      timeline: [fixation, test],
+      timeline_variables: test_stimuli_bl1,
+      repetitions: 2, 
+      randomize_order: true
+    }
+    timeline.push(block_init);
+    timeline.push(test_procedure_bl1);
+    timeline.push(end_block);
+
+    var test_procedure_bl2 = {
+      timeline: [fixation, test],
+      timeline_variables: test_stimuli_bl2,
+      repetitions: 2, 
+      randomize_order: true
+    }
+    timeline.push(block_init);
+    timeline.push(test_procedure_bl2);
+    timeline.push(end_block);
+
+    var test_procedure_bl3 = {
+      timeline: [fixation, test],
+      timeline_variables: test_stimuli_bl3,
+      repetitions: 2, 
+      randomize_order: true
+    }
+    timeline.push(block_init);
+    timeline.push(test_procedure_bl3);
+    timeline.push(end);
+
+    var save_data = {
+      type: "survey-text",
+      questions: [{
+        prompt: "Please input your Mturk Worker ID one more time. Your data is being saved."
+      }],
+      on_finish: function(data) {
+        var responses = JSON.parse(data.responses);
+        var subjID = responses.Q0;
+        console.log(subjID)
+        saveData("IT_B0_" + subjID, jsPsych.data.get().csv());
+      },
+    }
+    timeline.push(save_data);
+
+    var debrief_block = {
+      type: "html-keyboard-response",
+      stimulus: function() {
+
+        var trials = jsPsych.data.get().filter({test_part: 'test'});
+        var rt = Math.round(trials.select('rt').mean());
+
+        return "<p>Press any key to complete the experiment. Thank you!</p>";
+
+      }
+    }
+    timeline.push(debrief_block);
+
+    /* start the experiment */
+    jsPsych.init({
+      timeline: timeline,
+      on_finish: function() {
+        //jsPsych.data.displayData();
+      }
+    });
+  </script>
+</html>
